@@ -7,17 +7,13 @@ Usage:
 ```yaml
   matrix:
     image: ptman/drone-plugin-matrix
-    homeserver: https://matrix.org
+    homeserver: https://matrix.org          # defaults to https://matrix.org
     roomid: '!0123456789abcdef:matrix.org'  # room has to already be joined
-    username: ourbot                        # either username
-    password: *account-password*            # and password
-    userid: @ourbot:matrix.org              # or userid
-    accesstoken: 0123456789abcdef           # and accesstoken
-    secrets:                                # and a better idea
-      - source: matrix_username             # is to not store
-        target: plugin_username             # credentials in the git repo
-      - source: matrix_password             # but instead use drone
-        target: plugin_password             # secret management
+    secrets:
+      - matrix_username     # either username  ('ourbot')
+      - matrix_password     # and password     ('*ourbot-password*')
+    # - matrix_userid       # or userid        ('@ourbot:matrix.org')
+    # - matrix_accesstoken  # and access token ('long string of characters')
 ```
 
 ## License

@@ -11,13 +11,33 @@ import (
 )
 
 func main() {
+	// Secrets
+	password := os.Getenv("MATRIX_PASSWORD")
+	accessToken := os.Getenv("MATRIX_ACCESSTOKEN")
+	// Not sure if these are secrets or nice to have close to them
+	userName := os.Getenv("MATRIX_USERNAME")
+	userID := os.Getenv("MATRIX_USERID")
+
+	// Override secrets if present
+	if pw := os.Getenv("PLUGIN_PASSWORD"); pw != "" {
+		password = pw
+	}
+	if at := os.Getenv("PLUGIN_ACCESSTOKEN"); at != "" {
+		accessToken = at
+	}
+	if un := os.Getenv("PLUGIN_USERNAME"); un != "" {
+		userName = un
+	}
+	if ui := os.Getenv("PLUGIN_USERID"); ui != "" {
+		userID = ui
+	}
+
 	homeServer := os.Getenv("PLUGIN_HOMESERVER")
-	userName := os.Getenv("PLUGIN_USERNAME")
-	password := os.Getenv("PLUGIN_PASSWORD")
+	if homeServer == "" {
+		homeServer = "https://matrix.org"
+	}
 
-	userID := os.Getenv("PLUGIN_USERID")
-	accessToken := os.Getenv("PLUGIN_ACCESSTOKEN")
-
+	// TODO: resolve room aliases
 	roomID := os.Getenv("PLUGIN_ROOMID")
 	message := os.Getenv("PLUGIN_MESSAGE")
 
