@@ -1,8 +1,13 @@
 # vim: set ft=dockerfile:
-FROM alpine:3.6
-# Author with no obligation to maintain
-MAINTAINER Paul Tötterman <paul.totterman@gmail.com>
+FROM golang:1.9 as builder
 
-RUN apk --no-cache add ca-certificates
-ADD drone-plugin-matrix /
-ENTRYPOINT /drone-plugin-matrix
+ENV CGO_ENABLED=0
+
+RUN go get github.com/ptman/drone-plugin-matrix
+
+FROM scratch
+
+COPY --from=builder /go/bin/drone-plugin-matrix /drone-plugin-matrix
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+
+ENTRYPOINT [ "/drone-plugin-matrix" ]
