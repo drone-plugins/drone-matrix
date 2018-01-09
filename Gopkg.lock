@@ -2,14 +2,26 @@
 
 
 [[projects]]
+  name = "github.com/aymerick/raymond"
+  packages = [".","ast","lexer","parser"]
+  revision = "a2232af10b53ef1ae5a767f5178db3a6c1dab655"
+  version = "v2.0.1"
+
+[[projects]]
   branch = "master"
   name = "github.com/matrix-org/gomatrix"
   packages = ["."]
   revision = "a7fc80c8060c2544fe5d4dae465b584f8e9b4e27"
 
+[[projects]]
+  name = "github.com/urfave/cli"
+  packages = ["."]
+  revision = "cfb38830724cc34fedffe9a2a29fb54fa9169cd1"
+  version = "v1.20.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "d631b7f46070377e77e160dda36075f4421695f6149e974427eafc8458012b3c"
+  inputs-digest = "02adaa1a61f60449825943c7e92d6d66d4b88b225834f75dc6c181a96836f25b"
   solver-name = "gps-cdcl"
   solver-version = 1

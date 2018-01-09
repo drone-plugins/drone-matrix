@@ -1,5 +1,3 @@
-// Copyright (c) 2017 Paul Tötterman <ptman@iki.fi>. All rights reserved.
-
 package main
 
 import (
@@ -7,79 +5,183 @@ import (
 	"log"
 	"os"
 
-	"github.com/matrix-org/gomatrix"
+	"github.com/urfave/cli"
+)
+
+var (
+	version = "0.0.0"
+	build   = "0"
 )
 
 func main() {
-	// Secrets
-	password := os.Getenv("MATRIX_PASSWORD")
-	accessToken := os.Getenv("MATRIX_ACCESSTOKEN")
-	// Not sure if these are secrets or nice to have close to them
-	userName := os.Getenv("MATRIX_USERNAME")
-	userID := os.Getenv("MATRIX_USERID")
-
-	// Override secrets if present
-	if pw := os.Getenv("PLUGIN_PASSWORD"); pw != "" {
-		password = pw
+	app := cli.NewApp()
+	app.Name = "codecov plugin"
+	app.Usage = "codecov plugin"
+	app.Version = fmt.Sprintf("%s+%s", version, build)
+	app.Action = run
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:   "username",
+			Usage:  "username for authentication",
+			EnvVar: "PLUGIN_USERNAME,MATRIX_USERNAME",
+		},
+		cli.StringFlag{
+			Name:   "password",
+			Usage:  "password for authentication",
+			EnvVar: "PLUGIN_PASSWORD,MATRIX_PASSWORD",
+		},
+		cli.StringFlag{
+			Name:   "userid",
+			Usage:  "userid for authentication",
+			EnvVar: "PLUGIN_USERID,PLUGIN_USER_ID,MATRIX_USERID,MATRIX_USER_ID",
+		},
+		cli.StringFlag{
+			Name:   "accesstoken",
+			Usage:  "accesstoken for authentication",
+			EnvVar: "PLUGIN_ACCESSTOKEN,PLUGIN_ACCESS_TOKEN,MATRIX_ACCESSTOKEN,MATRIX_ACCESS_TOKEN",
+		},
+		cli.StringFlag{
+			Name:   "homeserver",
+			Value:  "https://matrix.org",
+			Usage:  "matrix home server",
+			EnvVar: "PLUGIN_HOMESERVER,MATRIX_HOMESERVER",
+		},
+		cli.StringFlag{
+			Name:   "roomid",
+			Usage:  "roomid to send messages",
+			EnvVar: "PLUGIN_ROOMID,MATRIX_ROOMID",
+		},
+		cli.StringFlag{
+			Name:   "template",
+			Usage:  "template for the message",
+			EnvVar: "PLUGIN_TEMPLATE,MATRIX_TEMPLATE",
+		},
+		cli.StringFlag{
+			Name:   "repo.owner",
+			Usage:  "repository owner",
+			EnvVar: "DRONE_REPO_OWNER",
+		},
+		cli.StringFlag{
+			Name:   "repo.name",
+			Usage:  "repository name",
+			EnvVar: "DRONE_REPO_NAME",
+		},
+		cli.StringFlag{
+			Name:   "commit.sha",
+			Usage:  "git commit sha",
+			EnvVar: "DRONE_COMMIT_SHA",
+			Value:  "00000000",
+		},
+		cli.StringFlag{
+			Name:   "commit.ref",
+			Value:  "refs/heads/master",
+			Usage:  "git commit ref",
+			EnvVar: "DRONE_COMMIT_REF",
+		},
+		cli.StringFlag{
+			Name:   "commit.branch",
+			Value:  "master",
+			Usage:  "git commit branch",
+			EnvVar: "DRONE_COMMIT_BRANCH",
+		},
+		cli.StringFlag{
+			Name:   "commit.author",
+			Usage:  "git author name",
+			EnvVar: "DRONE_COMMIT_AUTHOR",
+		},
+		cli.StringFlag{
+			Name:   "commit.message",
+			Usage:  "commit message",
+			EnvVar: "DRONE_COMMIT_MESSAGE",
+		},
+		cli.StringFlag{
+			Name:   "build.event",
+			Value:  "push",
+			Usage:  "build event",
+			EnvVar: "DRONE_BUILD_EVENT",
+		},
+		cli.IntFlag{
+			Name:   "build.number",
+			Usage:  "build number",
+			EnvVar: "DRONE_BUILD_NUMBER",
+		},
+		cli.StringFlag{
+			Name:   "build.status",
+			Usage:  "build status",
+			Value:  "success",
+			EnvVar: "DRONE_BUILD_STATUS",
+		},
+		cli.StringFlag{
+			Name:   "build.link",
+			Usage:  "build link",
+			EnvVar: "DRONE_BUILD_LINK",
+		},
+		cli.Int64Flag{
+			Name:   "build.started",
+			Usage:  "build started",
+			EnvVar: "DRONE_BUILD_STARTED",
+		},
+		cli.Int64Flag{
+			Name:   "build.created",
+			Usage:  "build created",
+			EnvVar: "DRONE_BUILD_CREATED",
+		},
+		cli.StringFlag{
+			Name:   "build.tag",
+			Usage:  "build tag",
+			EnvVar: "DRONE_TAG",
+		},
+		cli.StringFlag{
+			Name:   "build.deployTo",
+			Usage:  "environment deployed to",
+			EnvVar: "DRONE_DEPLOY_TO",
+		},
+		cli.Int64Flag{
+			Name:   "job.started",
+			Usage:  "job started",
+			EnvVar: "DRONE_JOB_STARTED",
+		},
 	}
-	if at := os.Getenv("PLUGIN_ACCESSTOKEN"); at != "" {
-		accessToken = at
-	}
-	if un := os.Getenv("PLUGIN_USERNAME"); un != "" {
-		userName = un
-	}
-	if ui := os.Getenv("PLUGIN_USERID"); ui != "" {
-		userID = ui
-	}
 
-	homeServer := os.Getenv("PLUGIN_HOMESERVER")
-	if homeServer == "" {
-		homeServer = "https://matrix.org"
-	}
-
-	// TODO: resolve room aliases
-	roomID := os.Getenv("PLUGIN_ROOMID")
-	message := os.Getenv("PLUGIN_MESSAGE")
-
-	repoOwner := os.Getenv("DRONE_REPO_OWNER")
-	repoName := os.Getenv("DRONE_REPO_NAME")
-
-	buildStatus := os.Getenv("DRONE_BUILD_STATUS")
-	buildLink := os.Getenv("DRONE_BUILD_LINK")
-	buildBranch := os.Getenv("DRONE_BRANCH")
-	buildAuthor := os.Getenv("DRONE_COMMIT_AUTHOR")
-	buildCommit := os.Getenv("DRONE_COMMIT")
-
-	m, err := gomatrix.NewClient(homeServer, userID, accessToken)
-	if err != nil {
+	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
+}
 
-	if userID == "" || accessToken == "" {
-		r, err := m.Login(&gomatrix.ReqLogin{
-			Type:                     "m.login.password",
-			User:                     userName,
-			Password:                 password,
-			InitialDeviceDisplayName: "Drone",
-		})
-		if err != nil {
-			log.Fatal(err)
-		}
-		m.SetCredentials(r.UserID, r.AccessToken)
+func run(c *cli.Context) error {
+	plugin := Plugin{
+		Repo: Repo{
+			Owner: c.String("repo.owner"),
+			Name:  c.String("repo.name"),
+		},
+		Build: Build{
+			Tag:      c.String("build.tag"),
+			Number:   c.Int("build.number"),
+			Event:    c.String("build.event"),
+			Status:   c.String("build.status"),
+			Commit:   c.String("commit.sha"),
+			Ref:      c.String("commit.ref"),
+			Branch:   c.String("commit.branch"),
+			Author:   c.String("commit.author"),
+			Message:  c.String("commit.message"),
+			DeployTo: c.String("build.deployTo"),
+			Link:     c.String("build.link"),
+			Started:  c.Int64("build.started"),
+			Created:  c.Int64("build.created"),
+		},
+		Job: Job{
+			Started: c.Int64("job.started"),
+		},
+		Config: Config{
+			Username:    c.String("username"),
+			Password:    c.String("password"),
+			UserID:      c.String("userid"),
+			AccessToken: c.String("accesstoken"),
+			Homeserver:  c.String("homeserver"),
+			RoomID:      c.String("roomid"),
+			Template:    c.String("template"),
+		},
 	}
 
-	if message == "" {
-		message = fmt.Sprintf("Build %s <%s> %s/%s#%s (%s) by %s",
-			buildStatus,
-			buildLink,
-			repoOwner,
-			repoName,
-			buildCommit[:8],
-			buildBranch,
-			buildAuthor)
-	}
-
-	if _, err := m.SendNotice(roomID, message); err != nil {
-		log.Fatal(err)
-	}
+	return plugin.Exec()
 }
