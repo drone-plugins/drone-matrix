@@ -6,5 +6,5 @@ LABEL maintainer="Drone.IO Community <drone-dev@googlegroups.com>" `
   org.label-schema.vendor="Drone.IO Community" `
   org.label-schema.schema-version="1.0"
 
-ADD drone-matrix.exe /drone-matrix.exe
-ENTRYPOINT [ "\\drone-matrix.exe" ]
+ADD drone-matrix.exe c:\drone-matrix.exe
+ENTRYPOINT [ "c:\\drone-matrix.exe" ]

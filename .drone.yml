@@ -10,7 +10,7 @@ pipeline:
       - go vet
       - |
         for PKG in $(go list ./... | grep -v /vendor/); do
-          go test -cover -coverprofile $PKG/coverage.out $PKG
+          go test -cover -coverprofile $GOPATH/src/$PKG/coverage.out $PKG
         done
 
   build_linux_amd64:
@@ -85,7 +85,7 @@ pipeline:
     group: docker
     repo: plugins/matrix
     auto_tag: true
-    auto_tag_suffix: amd64
+    auto_tag_suffix: linux-amd64
     dockerfile: Dockerfile
     when:
       event: [ push, tag ]
@@ -97,7 +97,7 @@ pipeline:
     group: docker
     repo: plugins/matrix
     auto_tag: true
-    auto_tag_suffix: i386
+    auto_tag_suffix: linux-i386
     dockerfile: Dockerfile.i386
     when:
       event: [ push, tag ]
@@ -109,7 +109,7 @@ pipeline:
     group: docker
     repo: plugins/matrix
     auto_tag: true
-    auto_tag_suffix: arm64
+    auto_tag_suffix: linux-arm64
     dockerfile: Dockerfile.arm64
     when:
       event: [ push, tag ]
@@ -121,7 +121,7 @@ pipeline:
     group: docker
     repo: plugins/matrix
     auto_tag: true
-    auto_tag_suffix: arm
+    auto_tag_suffix: linux-arm
     dockerfile: Dockerfile.arm
     when:
       event: [ push, tag ]
