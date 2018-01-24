@@ -33,5 +33,7 @@ docker run --rm \
   -e PLUGIN_ROOMID=0123456789abcdef:matrix.org \
   -e PLUGIN_USERNAME=yourbot \
   -e PLUGIN_PASSWORD=p455w0rd \
+  -v $(pwd):$(pwd) \
+  -w $(pwd) \
   plugins/matrix
 ```
