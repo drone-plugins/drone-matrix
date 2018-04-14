@@ -3,15 +3,32 @@
 
 [[projects]]
   name = "github.com/aymerick/raymond"
-  packages = [".","ast","lexer","parser"]
-  revision = "a2232af10b53ef1ae5a767f5178db3a6c1dab655"
-  version = "v2.0.1"
+  packages = [
+    ".",
+    "ast",
+    "lexer",
+    "parser"
+  ]
+  revision = "2eebd0f5dd9564c0c6e439df11d8a3c7b9b9ab11"
+  version = "v2.0.2"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/drone/drone-template-lib"
+  packages = ["template"]
+  revision = "5748d3149f4859c6d6cf43edb4fa35bba379c918"
 
 [[projects]]
   branch = "master"
   name = "github.com/matrix-org/gomatrix"
   packages = ["."]
   revision = "a7fc80c8060c2544fe5d4dae465b584f8e9b4e27"
+
+[[projects]]
+  name = "github.com/pkg/errors"
+  packages = ["."]
+  revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
+  version = "v0.8.0"
 
 [[projects]]
   name = "github.com/urfave/cli"
@@ -22,6 +39,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "02adaa1a61f60449825943c7e92d6d66d4b88b225834f75dc6c181a96836f25b"
+  inputs-digest = "e4283d82ea22e941f9ab4d2020b12f3721cd0235cb78cca670d2ae1105e148ef"
   solver-name = "gps-cdcl"
   solver-version = 1

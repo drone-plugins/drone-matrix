@@ -1,10 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"strings"
 
+	"github.com/drone/drone-template-lib/template"
 	"github.com/matrix-org/gomatrix"
+	"github.com/pkg/errors"
 )
 
 type (
@@ -55,7 +56,7 @@ func (p Plugin) Exec() error {
 	m, err := gomatrix.NewClient(p.Config.Homeserver, prepend("@", p.Config.UserID), p.Config.AccessToken)
 
 	if err != nil {
-		return err
+		return errors.Wrap(err, "failed to initialize client")
 	}
 
 	if p.Config.UserID == "" || p.Config.AccessToken == "" {
@@ -67,7 +68,7 @@ func (p Plugin) Exec() error {
 		})
 
 		if err != nil {
-			return err
+			return errors.Wrap(err, "failed to authenticate user")
 		}
 
 		m.SetCredentials(r.UserID, r.AccessToken)
@@ -76,39 +77,20 @@ func (p Plugin) Exec() error {
 	joined, err := m.JoinRoom(p.Config.RoomID, "", nil)
 
 	if err != nil {
-		return err
+		return errors.Wrap(err, "failed to join room")
 	}
 
-	message := message(p.Repo, p.Build)
+	message, err := template.RenderTrim(p.Config.Template, p)
 
-	if p.Config.Template != "" {
-		if message, err = RenderTrim(p.Config.Template, p); err != nil {
-			return err
-		}
-
-		if err != nil {
-			return err
-		}
+	if err != nil {
+		return errors.Wrap(err, "failed to render template")
 	}
 
 	if _, err := m.SendNotice(joined.RoomID, message); err != nil {
-		return err
+		return errors.Wrap(err, "failed to submit message")
 	}
 
 	return nil
-}
-
-func message(repo Repo, build Build) string {
-	return fmt.Sprintf(
-		"Build %s <%s|%s/%s#%s> (%s) by %s",
-		build.Status,
-		build.Link,
-		repo.Owner,
-		repo.Name,
-		build.Commit[:8],
-		build.Branch,
-		build.Author,
-	)
 }
 
 func prepend(prefix, s string) string {
