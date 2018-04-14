@@ -15,8 +15,8 @@ var (
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "codecov plugin"
-	app.Usage = "codecov plugin"
+	app.Name = "matrix plugin"
+	app.Usage = "matrix plugin"
 	app.Version = fmt.Sprintf("%s+%s", version, build)
 	app.Action = run
 	app.Flags = []cli.Flag{
@@ -42,9 +42,9 @@ func main() {
 		},
 		cli.StringFlag{
 			Name:   "homeserver",
-			Value:  "https://matrix.org",
 			Usage:  "matrix home server",
 			EnvVar: "PLUGIN_HOMESERVER,MATRIX_HOMESERVER",
+			Value:  "https://matrix.org",
 		},
 		cli.StringFlag{
 			Name:   "roomid",
@@ -55,6 +55,7 @@ func main() {
 			Name:   "template",
 			Usage:  "template for the message",
 			EnvVar: "PLUGIN_TEMPLATE,MATRIX_TEMPLATE",
+			Value:  "Build {{ build.status }} <{{ build.link }}|{{ repo.Owner }}/{{ repo.Name }}#{{ truncate build.commit 8 }}> ({{ build.branch }}) by {{ build.author }}",
 		},
 		cli.StringFlag{
 			Name:   "repo.owner",
