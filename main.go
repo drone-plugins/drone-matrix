@@ -55,7 +55,7 @@ func main() {
 			Name:   "template",
 			Usage:  "template for the message",
 			EnvVar: "PLUGIN_TEMPLATE,MATRIX_TEMPLATE",
-			Value:  "Build {{ build.status }} <{{ build.link }}|{{ repo.Owner }}/{{ repo.Name }}#{{ truncate build.commit 8 }}> ({{ build.branch }}) by {{ build.author }}",
+			Value:  "Build {{ build.status }} [{{ repo.Owner }}/{{ repo.Name }}#{{ truncate build.commit 8 }}]({{ build.link }}) ({{ build.branch }}) by {{ build.author }}",
 		},
 		cli.StringFlag{
 			Name:   "repo.owner",
