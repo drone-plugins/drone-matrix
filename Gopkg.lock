@@ -25,10 +25,22 @@
   revision = "a7fc80c8060c2544fe5d4dae465b584f8e9b4e27"
 
 [[projects]]
+  name = "github.com/microcosm-cc/bluemonday"
+  packages = ["."]
+  revision = "dafebb5b6ff2861a0d69af64991e10866c19be85"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/pkg/errors"
   packages = ["."]
   revision = "645ef00459ed84a119197bfb8d8205042c6df63d"
   version = "v0.8.0"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/shurcooL/sanitized_anchor_name"
+  packages = ["."]
+  revision = "86672fcb3f950f35f2e675df2240550f2a50762f"
 
 [[projects]]
   name = "github.com/urfave/cli"
@@ -36,9 +48,24 @@
   revision = "cfb38830724cc34fedffe9a2a29fb54fa9169cd1"
   version = "v1.20.0"
 
+[[projects]]
+  branch = "master"
+  name = "golang.org/x/net"
+  packages = [
+    "html",
+    "html/atom"
+  ]
+  revision = "f4c29de78a2a91c00474a2e689954305c350adf9"
+
+[[projects]]
+  name = "gopkg.in/russross/blackfriday.v2"
+  packages = ["."]
+  revision = "cadec560ec52d93835bf2f15bd794700d3a2473b"
+  version = "v2.0.0"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "e4283d82ea22e941f9ab4d2020b12f3721cd0235cb78cca670d2ae1105e148ef"
+  inputs-digest = "243a217f076aeb5fdc8b28a2a2f38884c3476409410f664e316cd92acf44d012"
   solver-name = "gps-cdcl"
   solver-version = 1
