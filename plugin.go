@@ -74,7 +74,7 @@ func (p Plugin) Exec() error {
 		m.SetCredentials(r.UserID, r.AccessToken)
 	}
 
-	joined, err := m.JoinRoom(p.Config.RoomID, "", nil)
+	joined, err := m.JoinRoom(prepend("!", p.Config.RoomID), "", nil)
 
 	if err != nil {
 		return errors.Wrap(err, "failed to join room")
