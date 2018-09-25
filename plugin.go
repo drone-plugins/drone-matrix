@@ -6,6 +6,8 @@ import (
 	"github.com/drone/drone-template-lib/template"
 	"github.com/matrix-org/gomatrix"
 	"github.com/pkg/errors"
+	"github.com/microcosm-cc/bluemonday"
+	"gopkg.in/russross/blackfriday.v2"
 )
 
 type (
@@ -74,7 +76,7 @@ func (p Plugin) Exec() error {
 		m.SetCredentials(r.UserID, r.AccessToken)
 	}
 
-	joined, err := m.JoinRoom(p.Config.RoomID, "", nil)
+	joined, err := m.JoinRoom(prepend("!", p.Config.RoomID), "", nil)
 
 	if err != nil {
 		return errors.Wrap(err, "failed to join room")
@@ -86,7 +88,18 @@ func (p Plugin) Exec() error {
 		return errors.Wrap(err, "failed to render template")
 	}
 
-	if _, err := m.SendNotice(joined.RoomID, message); err != nil {
+	formatted := bluemonday.UGCPolicy().SanitizeBytes(
+		blackfriday.Run([]byte(message)),
+	)
+
+	content := gomatrix.HTMLMessage{
+		Body: message,
+		MsgType: "m.notice",
+		Format: "org.matrix.custom.html",
+		FormattedBody: string(formatted),
+	}
+
+	if _, err := m.SendMessageEvent(joined.RoomID, "m.room.message", content); err != nil {
 		return errors.Wrap(err, "failed to submit message")
 	}
 
