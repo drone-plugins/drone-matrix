@@ -5,7 +5,7 @@ go 1.19
 require (
 	github.com/drone-plugins/drone-plugin-lib v0.4.0
 	github.com/drone/drone-template-lib v1.0.1-0.20201006172840-a58a3f26ebca
-	github.com/joho/godotenv v1.4.0
+	github.com/joho/godotenv v1.5.1
 	github.com/matrix-org/gomatrix v0.0.0-20220926102614-ceba4d9f7530
 	github.com/microcosm-cc/bluemonday v1.0.21
 	github.com/russross/blackfriday/v2 v2.1.0
