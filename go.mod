@@ -3,7 +3,7 @@ module github.com/drone-plugins/drone-matrix
 go 1.19
 
 require (
-	github.com/drone-plugins/drone-plugin-lib v0.4.0
+	github.com/drone-plugins/drone-plugin-lib v0.4.2
 	github.com/drone/drone-template-lib v1.0.1-0.20201006172840-a58a3f26ebca
 	github.com/joho/godotenv v1.4.0
 	github.com/matrix-org/gomatrix v0.0.0-20220926102614-ceba4d9f7530
