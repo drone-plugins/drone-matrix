@@ -9,7 +9,7 @@ require (
 	github.com/matrix-org/gomatrix v0.0.0-20220926102614-ceba4d9f7530
 	github.com/microcosm-cc/bluemonday v1.0.21
 	github.com/russross/blackfriday/v2 v2.1.0
-	github.com/urfave/cli/v2 v2.23.7
+	github.com/urfave/cli/v2 v2.27.1
 )
 
 require (
