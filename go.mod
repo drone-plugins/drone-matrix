@@ -1,6 +1,6 @@
 module github.com/drone-plugins/drone-matrix
 
-go 1.19
+go 1.22
 
 require (
 	github.com/drone-plugins/drone-plugin-lib v0.4.0
@@ -9,7 +9,8 @@ require (
 	github.com/matrix-org/gomatrix v0.0.0-20220926102614-ceba4d9f7530
 	github.com/microcosm-cc/bluemonday v1.0.21
 	github.com/russross/blackfriday/v2 v2.1.0
-	github.com/urfave/cli/v2 v2.23.7
+	github.com/urfave/cli/v2 v2.2.0
+	github.com/urfave/cli/v3 v3.11.0
 )
 
 require (
